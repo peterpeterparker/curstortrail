@@ -2,10 +2,6 @@
 // Any modifications may be overwritten.
 
 // @ts-expect-error
-export const idlFactory = ({ IDL }) => {
-  return IDL.Service({});
-};
+export const idlFactory = ({ IDL }) => { return IDL.Service({}); };
 // @ts-expect-error
-export const init = ({ IDL }) => {
-  return [];
-};
+export const init = ({ IDL }) => { return []; };
