@@ -41,7 +41,10 @@ export function TrailMap({ points, title }: TrailMapProps) {
       }).addTo(map);
 
       // Create polyline from GPX points
-      const latlngs: [number, number][] = points.map((point) => [point.lat, point.lng]);
+      const latlngs: [number, number][] = points.map((point) => [
+        point.lat,
+        point.lng,
+      ]);
       const polyline = L.polyline(latlngs, { color: "red", weight: 3 }).addTo(
         map,
       );

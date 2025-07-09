@@ -1,6 +1,5 @@
 "use client";
 
-import { Suspense } from "react";
 import { Navigation } from "@/components/navigation";
 import { TrailMap } from "@/components/trail-map";
 import { Badge } from "@/components/ui/badge";
@@ -25,7 +24,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 const difficultyColors = {
   easy: "bg-green-100 text-green-800",
@@ -439,7 +438,16 @@ function TrailsPageContent() {
 
 export default function TrailsPage() {
   return (
-    <Suspense fallback={<div className="bg-background min-h-screen"><Navigation /><div className="container mx-auto px-4 py-8"><div className="text-center">Loading...</div></div></div>}>
+    <Suspense
+      fallback={
+        <div className="bg-background min-h-screen">
+          <Navigation />
+          <div className="container mx-auto px-4 py-8">
+            <div className="text-center">Loading...</div>
+          </div>
+        </div>
+      }
+    >
       <TrailsPageContent />
     </Suspense>
   );
