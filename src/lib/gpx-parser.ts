@@ -5,6 +5,7 @@ export const parseGPX = async (gpxContent: string): Promise<GPXTrack> => {
   try {
     const gpxparser = await import("gpxparser");
     console.log("GPXParser module:", gpxparser);
+    // @ts-expect-error Unknown type
     const GPXParser = gpxparser.default || gpxparser.GPXParser;
     console.log("GPXParser constructor:", GPXParser);
     const gpx = new GPXParser();
@@ -34,8 +35,20 @@ export const parseGPX = async (gpxContent: string): Promise<GPXTrack> => {
     // Calculate elevation from points
     const elevation = calculateElevation(points);
 
-    // Calculate duration (if available in track data)
-    const duration = track.time?.total ? track.time.total / 1000 : 0;
+    // Calculate duration from point timestamps
+    let duration = 0;
+    const firstTimestamp = points[0].timestamp;
+    const lastTimestamp = points[points.length - 1].timestamp;
+    if (
+      points.length > 1 &&
+      typeof firstTimestamp === "string" &&
+      typeof lastTimestamp === "string"
+    ) {
+      duration =
+        (new Date(lastTimestamp).getTime() -
+          new Date(firstTimestamp).getTime()) /
+        1000;
+    }
 
     return {
       name: track.name || "Trail Track",

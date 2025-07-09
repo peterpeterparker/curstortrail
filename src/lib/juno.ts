@@ -95,5 +95,6 @@ export const uploadFile = async (file: File, path: string) => {
     data: file,
     filename: file.name,
     collection: "files",
+    fullPath: `/files/${path}`,
   });
 };

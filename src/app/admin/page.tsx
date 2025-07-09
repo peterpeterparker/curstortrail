@@ -22,7 +22,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { parseGPX } from "@/lib/gpx-parser";
 import { createTrail, uploadFile } from "@/lib/juno";
-import type { TrailFormData } from "@/types/trail";
+import type { GPXTrack, TrailFormData } from "@/types/trail";
 import { Upload, X } from "lucide-react";
 import { useState } from "react";
 
@@ -47,9 +47,9 @@ function AdminContent() {
   });
 
   const [loading, setLoading] = useState(false);
-  const [gpxData, setGpxData] = useState<any>(null);
+  const [gpxData, setGpxData] = useState<GPXTrack | null>(null);
 
-  const handleInputChange = (field: keyof TrailFormData, value: any) => {
+  const handleInputChange = (field: keyof TrailFormData, value: unknown) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 

@@ -31,7 +31,7 @@ export interface GPXPoint {
   lat: number;
   lng: number;
   elevation?: number;
-  timestamp?: string;
+  timestamp?: Date;
 }
 
 export interface GPXTrack {

@@ -127,7 +127,7 @@ export default function TrailsPage() {
             <div className="text-center">
               <h1 className="mb-4 text-2xl font-bold">Trail Not Found</h1>
               <p className="text-muted-foreground mb-4">
-                The trail you're looking for doesn't exist.
+                The trail you&apos;re looking for doesn&apos;t exist.
               </p>
               <Link href="/trails">
                 <Button>Back to Trails</Button>

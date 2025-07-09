@@ -44,7 +44,7 @@ export default function HomePage() {
       <section className="bg-muted/50 px-4 py-16">
         <div className="container mx-auto">
           <h2 className="mb-12 text-center text-3xl font-bold">
-            What You'll Find
+            What You Will Find
           </h2>
           <div className="grid gap-8 md:grid-cols-3">
             <Card>

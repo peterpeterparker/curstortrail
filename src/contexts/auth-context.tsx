@@ -1,10 +1,11 @@
 "use client";
 
 import { login, logout, subscribeToAuth } from "@/lib/auth";
+import type { User } from "@junobuild/core";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
-  user: any;
+  user: User | null;
   isLoading: boolean;
   signIn: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -13,7 +14,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

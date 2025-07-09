@@ -12,7 +12,7 @@ interface TrailMapProps {
 
 export function TrailMap({ points, title }: TrailMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any>(null);
+  const mapInstanceRef = useRef<unknown>(null);
 
   useEffect(() => {
     if (!mapRef.current || points.length === 0) return;
@@ -71,6 +71,7 @@ export function TrailMap({ points, title }: TrailMapProps) {
 
     return () => {
       if (mapInstanceRef.current) {
+        // @ts-expect-error Cursor code
         mapInstanceRef.current.remove();
       }
     };
