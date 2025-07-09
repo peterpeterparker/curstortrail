@@ -48,7 +48,7 @@ export function Navigation() {
               <div className="flex items-center space-x-2">
                 <div className="text-muted-foreground flex items-center space-x-1 text-sm">
                   <User className="h-4 w-4" />
-                  <span>{user.userId}</span>
+                  <span>{user?.key ?? ""}</span>
                 </div>
                 <Button
                   variant="outline"
