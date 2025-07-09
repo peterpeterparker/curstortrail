@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { Navigation } from "@/components/navigation";
 import { TrailMap } from "@/components/trail-map";
 import { Badge } from "@/components/ui/badge";
@@ -33,7 +34,7 @@ const difficultyColors = {
   expert: "bg-red-100 text-red-800",
 };
 
-export default function TrailsPage() {
+function TrailsPageContent() {
   const searchParams = useSearchParams();
   const trailId = searchParams.get("id");
   const [trails, setTrails] = useState<Trail[] | undefined>(undefined);
@@ -433,5 +434,13 @@ export default function TrailsPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function TrailsPage() {
+  return (
+    <Suspense fallback={<div className="bg-background min-h-screen"><Navigation /><div className="container mx-auto px-4 py-8"><div className="text-center">Loading...</div></div></div>}>
+      <TrailsPageContent />
+    </Suspense>
   );
 }
