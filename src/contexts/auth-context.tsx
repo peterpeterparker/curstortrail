@@ -1,7 +1,7 @@
 "use client";
 
+import { login, logout, subscribeToAuth } from "@/lib/auth";
 import { createContext, useContext, useEffect, useState } from "react";
-import { subscribeToAuth, login, logout } from "@/lib/auth";
 
 interface AuthContextType {
   user: any;
@@ -56,4 +56,4 @@ export function useAuth() {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-} 
+}

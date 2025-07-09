@@ -1,4 +1,4 @@
-import { signIn, signOut, authSubscribe, initJuno } from "@junobuild/core";
+import { authSubscribe, signIn, signOut } from "@junobuild/core";
 
 export const initAuth = async () => {
   // Auth is initialized by the JunoProvider
@@ -25,4 +25,4 @@ export const logout = async () => {
 
 export const subscribeToAuth = (callback: (user: any) => void) => {
   return authSubscribe(callback);
-}; 
+};

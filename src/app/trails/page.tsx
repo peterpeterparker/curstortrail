@@ -1,18 +1,30 @@
 "use client";
 
 import { Navigation } from "@/components/navigation";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { TrailMap } from "@/components/trail-map";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Mountain, MapPin, Clock, TrendingUp, Calendar } from "lucide-react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { getTrails, getTrail } from "@/lib/juno";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { parseGPX } from "@/lib/gpx-parser";
-import { TrailMap } from "@/components/trail-map";
-import { ArrowLeft } from "lucide-react";
-import type { Trail, GPXPoint } from "@/types/trail";
+import { getTrail, getTrails } from "@/lib/juno";
+import type { GPXPoint, Trail } from "@/types/trail";
+import {
+  ArrowLeft,
+  Calendar,
+  Clock,
+  MapPin,
+  Mountain,
+  TrendingUp,
+} from "lucide-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const difficultyColors = {
   easy: "bg-green-100 text-green-800",
@@ -23,7 +35,7 @@ const difficultyColors = {
 
 export default function TrailsPage() {
   const searchParams = useSearchParams();
-  const trailId = searchParams.get('id');
+  const trailId = searchParams.get("id");
   const [trails, setTrails] = useState<Trail[] | undefined>(undefined);
   const [trail, setTrail] = useState<Trail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -45,13 +57,13 @@ export default function TrailsPage() {
           // Generate photo URLs
           if (trailData.photos.length > 0) {
             const { downloadUrl } = await import("@junobuild/core");
-            const urls = trailData.photos.map(photo => 
+            const urls = trailData.photos.map((photo) =>
               downloadUrl({
                 assetKey: {
                   fullPath: photo,
                   token: undefined,
                 },
-              })
+              }),
             );
             setPhotoUrls(urls);
           }
@@ -66,7 +78,7 @@ export default function TrailsPage() {
                   token: undefined,
                 },
               });
-              
+
               const response = await fetch(gpxUrl);
               const gpxContent = await response.text();
               const parsed = await parseGPX(gpxContent);
@@ -96,7 +108,7 @@ export default function TrailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="bg-background min-h-screen">
         <Navigation />
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">Loading...</div>
@@ -109,11 +121,11 @@ export default function TrailsPage() {
   if (trailId) {
     if (!trail) {
       return (
-        <div className="min-h-screen bg-background">
+        <div className="bg-background min-h-screen">
           <Navigation />
           <div className="container mx-auto px-4 py-8">
             <div className="text-center">
-              <h1 className="text-2xl font-bold mb-4">Trail Not Found</h1>
+              <h1 className="mb-4 text-2xl font-bold">Trail Not Found</h1>
               <p className="text-muted-foreground mb-4">
                 The trail you're looking for doesn't exist.
               </p>
@@ -127,26 +139,29 @@ export default function TrailsPage() {
     }
 
     return (
-      <div className="min-h-screen bg-background">
+      <div className="bg-background min-h-screen">
         <Navigation />
-        
+
         <div className="container mx-auto px-4 py-8">
           <div className="mb-6">
-            <Link href="/trails" className="inline-flex items-center text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+            <Link
+              href="/trails"
+              className="text-muted-foreground hover:text-foreground inline-flex items-center"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Trails
             </Link>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid gap-8 lg:grid-cols-3">
             {/* Main Content */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="space-y-6 lg:col-span-2">
               <div>
-                <div className="flex items-start justify-between mb-4">
+                <div className="mb-4 flex items-start justify-between">
                   <div>
-                    <h1 className="text-3xl font-bold mb-2">{trail.title}</h1>
+                    <h1 className="mb-2 text-3xl font-bold">{trail.title}</h1>
                     <p className="text-muted-foreground flex items-center">
-                      <MapPin className="h-4 w-4 mr-1" />
+                      <MapPin className="mr-1 h-4 w-4" />
                       {trail.location}
                     </p>
                   </div>
@@ -155,31 +170,43 @@ export default function TrailsPage() {
                   </Badge>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4 mb-6">
-                  <div className="text-center p-4 bg-muted rounded-lg">
-                    <TrendingUp className="h-6 w-6 mx-auto mb-2 text-primary" />
-                    <div className="text-lg font-semibold">{trail.distance.toFixed(1)}km</div>
-                    <div className="text-sm text-muted-foreground">Distance</div>
+                <div className="mb-6 grid grid-cols-3 gap-4">
+                  <div className="bg-muted rounded-lg p-4 text-center">
+                    <TrendingUp className="text-primary mx-auto mb-2 h-6 w-6" />
+                    <div className="text-lg font-semibold">
+                      {trail.distance.toFixed(1)}km
+                    </div>
+                    <div className="text-muted-foreground text-sm">
+                      Distance
+                    </div>
                   </div>
-                  <div className="text-center p-4 bg-muted rounded-lg">
-                    <Mountain className="h-6 w-6 mx-auto mb-2 text-primary" />
-                    <div className="text-lg font-semibold">{trail.elevation.toFixed(0)}m</div>
-                    <div className="text-sm text-muted-foreground">Elevation</div>
+                  <div className="bg-muted rounded-lg p-4 text-center">
+                    <Mountain className="text-primary mx-auto mb-2 h-6 w-6" />
+                    <div className="text-lg font-semibold">
+                      {trail.elevation.toFixed(0)}m
+                    </div>
+                    <div className="text-muted-foreground text-sm">
+                      Elevation
+                    </div>
                   </div>
-                  <div className="text-center p-4 bg-muted rounded-lg">
-                    <Clock className="h-6 w-6 mx-auto mb-2 text-primary" />
-                    <div className="text-lg font-semibold">{trail.duration}</div>
-                    <div className="text-sm text-muted-foreground">Duration</div>
+                  <div className="bg-muted rounded-lg p-4 text-center">
+                    <Clock className="text-primary mx-auto mb-2 h-6 w-6" />
+                    <div className="text-lg font-semibold">
+                      {trail.duration}
+                    </div>
+                    <div className="text-muted-foreground text-sm">
+                      Duration
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-center text-sm text-muted-foreground mb-6">
-                  <Calendar className="h-4 w-4 mr-1" />
-                  {new Date(trail.date).toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
+                <div className="text-muted-foreground mb-6 flex items-center text-sm">
+                  <Calendar className="mr-1 h-4 w-4" />
+                  {new Date(trail.date).toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
                   })}
                 </div>
 
@@ -207,13 +234,16 @@ export default function TrailsPage() {
                     <CardTitle>Photos</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
                       {photoUrls.map((photoUrl, index) => (
-                        <div key={index} className="aspect-square bg-muted rounded-lg overflow-hidden">
+                        <div
+                          key={index}
+                          className="bg-muted aspect-square overflow-hidden rounded-lg"
+                        >
                           <img
                             src={photoUrl}
                             alt={`Trail photo ${index + 1}`}
-                            className="w-full h-full object-cover"
+                            className="h-full w-full object-cover"
                           />
                         </div>
                       ))}
@@ -231,31 +261,47 @@ export default function TrailsPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <div className="text-sm font-medium text-muted-foreground">Difficulty</div>
-                    <div className="flex items-center mt-1">
+                    <div className="text-muted-foreground text-sm font-medium">
+                      Difficulty
+                    </div>
+                    <div className="mt-1 flex items-center">
                       <Badge className={difficultyColors[trail.difficulty]}>
                         {trail.difficulty}
                       </Badge>
                     </div>
                   </div>
-                  
+
                   <div>
-                    <div className="text-sm font-medium text-muted-foreground">Distance</div>
-                    <div className="text-lg font-semibold">{trail.distance.toFixed(1)} kilometers</div>
+                    <div className="text-muted-foreground text-sm font-medium">
+                      Distance
+                    </div>
+                    <div className="text-lg font-semibold">
+                      {trail.distance.toFixed(1)} kilometers
+                    </div>
                   </div>
-                  
+
                   <div>
-                    <div className="text-sm font-medium text-muted-foreground">Elevation Gain</div>
-                    <div className="text-lg font-semibold">{trail.elevation.toFixed(0)} meters</div>
+                    <div className="text-muted-foreground text-sm font-medium">
+                      Elevation Gain
+                    </div>
+                    <div className="text-lg font-semibold">
+                      {trail.elevation.toFixed(0)} meters
+                    </div>
                   </div>
-                  
+
                   <div>
-                    <div className="text-sm font-medium text-muted-foreground">Duration</div>
-                    <div className="text-lg font-semibold">{trail.duration}</div>
+                    <div className="text-muted-foreground text-sm font-medium">
+                      Duration
+                    </div>
+                    <div className="text-lg font-semibold">
+                      {trail.duration}
+                    </div>
                   </div>
-                  
+
                   <div>
-                    <div className="text-sm font-medium text-muted-foreground">Date</div>
+                    <div className="text-muted-foreground text-sm font-medium">
+                      Date
+                    </div>
                     <div className="text-lg font-semibold">
                       {new Date(trail.date).toLocaleDateString()}
                     </div>
@@ -285,21 +331,21 @@ export default function TrailsPage() {
 
   // Show trails listing
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <Navigation />
-      
+
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">All Trails</h1>
+          <h1 className="mb-2 text-3xl font-bold">All Trails</h1>
           <p className="text-muted-foreground">
             Explore all my trail running adventures
           </p>
         </div>
 
         {!trails || trails.length === 0 ? (
-          <div className="text-center py-12">
-            <Mountain className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No trails yet</h3>
+          <div className="py-12 text-center">
+            <Mountain className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
+            <h3 className="mb-2 text-lg font-semibold">No trails yet</h3>
             <p className="text-muted-foreground mb-4">
               Start adding your trail running adventures to see them here.
             </p>
@@ -308,15 +354,20 @@ export default function TrailsPage() {
             </Link>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {trails?.map((trail) => (
-              <Card key={trail.id} className="hover:shadow-lg transition-shadow">
+              <Card
+                key={trail.id}
+                className="transition-shadow hover:shadow-lg"
+              >
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>
-                      <CardTitle className="line-clamp-2">{trail.title}</CardTitle>
-                      <CardDescription className="flex items-center mt-2">
-                        <MapPin className="h-4 w-4 mr-1" />
+                      <CardTitle className="line-clamp-2">
+                        {trail.title}
+                      </CardTitle>
+                      <CardDescription className="mt-2 flex items-center">
+                        <MapPin className="mr-1 h-4 w-4" />
                         {trail.location}
                       </CardDescription>
                     </div>
@@ -327,27 +378,27 @@ export default function TrailsPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <p className="text-sm text-muted-foreground line-clamp-3">
+                    <p className="text-muted-foreground line-clamp-3 text-sm">
                       {trail.description}
                     </p>
-                    
+
                     <div className="grid grid-cols-3 gap-4 text-sm">
                       <div className="flex items-center">
-                        <TrendingUp className="h-4 w-4 mr-1 text-muted-foreground" />
+                        <TrendingUp className="text-muted-foreground mr-1 h-4 w-4" />
                         <span>{trail.distance.toFixed(1)}km</span>
                       </div>
                       <div className="flex items-center">
-                        <Mountain className="h-4 w-4 mr-1 text-muted-foreground" />
+                        <Mountain className="text-muted-foreground mr-1 h-4 w-4" />
                         <span>{trail.elevation.toFixed(0)}m</span>
                       </div>
                       <div className="flex items-center">
-                        <Clock className="h-4 w-4 mr-1 text-muted-foreground" />
+                        <Clock className="text-muted-foreground mr-1 h-4 w-4" />
                         <span>{trail.duration}</span>
                       </div>
                     </div>
 
-                    <div className="flex items-center text-xs text-muted-foreground">
-                      <Calendar className="h-3 w-3 mr-1" />
+                    <div className="text-muted-foreground flex items-center text-xs">
+                      <Calendar className="mr-1 h-3 w-3" />
                       {new Date(trail.date).toLocaleDateString()}
                     </div>
 
@@ -356,13 +407,13 @@ export default function TrailsPage() {
                         {trail.photos.slice(0, 3).map((photo, index) => (
                           <div
                             key={index}
-                            className="w-12 h-12 bg-muted rounded-md flex items-center justify-center text-xs text-muted-foreground"
+                            className="bg-muted text-muted-foreground flex h-12 w-12 items-center justify-center rounded-md text-xs"
                           >
                             📷
                           </div>
                         ))}
                         {trail.photos.length > 3 && (
-                          <div className="w-12 h-12 bg-muted rounded-md flex items-center justify-center text-xs text-muted-foreground">
+                          <div className="bg-muted text-muted-foreground flex h-12 w-12 items-center justify-center rounded-md text-xs">
                             +{trail.photos.length - 3}
                           </div>
                         )}
@@ -383,4 +434,4 @@ export default function TrailsPage() {
       </div>
     </div>
   );
-} 
+}

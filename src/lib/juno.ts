@@ -1,5 +1,5 @@
-import { initJuno } from "@junobuild/core";
 import type { Trail } from "@/types/trail";
+import { initJuno } from "@junobuild/core";
 
 // Initialize Juno
 export const initJunoClient = async () => {
@@ -8,16 +8,18 @@ export const initJunoClient = async () => {
     console.warn("NEXT_PUBLIC_SATELLITE_ID not found in environment variables");
     return;
   }
-  
+
   await initJuno({
     satelliteId,
   });
 };
 
 // Trail collection operations
-export const createTrail = async (trail: Omit<Trail, 'id' | 'createdAt' | 'updatedAt'>) => {
+export const createTrail = async (
+  trail: Omit<Trail, "id" | "createdAt" | "updatedAt">,
+) => {
   const { setDoc } = await import("@junobuild/core");
-  
+
   const now = new Date().toISOString();
   const trailId = crypto.randomUUID();
   const trailWithMetadata = {
@@ -38,18 +40,18 @@ export const createTrail = async (trail: Omit<Trail, 'id' | 'createdAt' | 'updat
 
 export const getTrails = async () => {
   const { listDocs } = await import("@junobuild/core");
-  
+
   const trails = await listDocs({
     collection: "trails",
     filter: {},
   });
 
-  return trails.items.map(doc => doc.data) as Trail[];
+  return trails.items.map((doc) => doc.data) as Trail[];
 };
 
 export const getTrail = async (id: string) => {
   const { getDoc } = await import("@junobuild/core");
-  
+
   const trail = await getDoc({
     collection: "trails",
     key: id,
@@ -60,7 +62,7 @@ export const getTrail = async (id: string) => {
 
 export const updateTrail = async (id: string, updates: Partial<Trail>) => {
   const { setDoc } = await import("@junobuild/core");
-  
+
   const updatedTrail = {
     ...updates,
     updatedAt: new Date().toISOString(),
@@ -88,10 +90,10 @@ export const deleteTrail = async (id: string) => {
 // File storage operations
 export const uploadFile = async (file: File, path: string) => {
   const { uploadFile: upload } = await import("@junobuild/core");
-  
+
   return await upload({
     data: file,
     filename: file.name,
     collection: "files",
   });
-}; 
+};

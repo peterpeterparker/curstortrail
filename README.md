@@ -27,19 +27,21 @@ A personal website built with Next.js, Shadcn/UI, and Juno for sharing trail run
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm, yarn, or pnpm
 - Juno CLI (for deployment)
 
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <your-repo-url>
    cd curstortrail
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
@@ -47,11 +49,13 @@ A personal website built with Next.js, Shadcn/UI, and Juno for sharing trail run
 3. **Set up Juno**
 
    First, install the Juno CLI:
+
    ```bash
    npm i -g @junobuild/cli
    ```
 
    Start the local emulator:
+
    ```bash
    juno dev start
    ```
@@ -59,7 +63,6 @@ A personal website built with Next.js, Shadcn/UI, and Juno for sharing trail run
    Open the Console UI at [http://localhost:5866/](http://localhost:5866/)
 
 4. **Create a Satellite and Collections**
-
    - Sign in to the Juno Console
    - Create a new Satellite
    - Navigate to the **Datastore** section
@@ -71,20 +74,22 @@ A personal website built with Next.js, Shadcn/UI, and Juno for sharing trail run
 5. **Configure the Satellite ID**
 
    Update the `juno.config.mjs` file with your Satellite ID:
+
    ```javascript
    export default defineConfig({
      satellite: {
        ids: {
          development: "YOUR_DEV_SATELLITE_ID",
-         production: "YOUR_PROD_SATELLITE_ID"
+         production: "YOUR_PROD_SATELLITE_ID",
        },
        source: "out",
-       predeploy: ["npm run build"]
-     }
+       predeploy: ["npm run build"],
+     },
    });
    ```
 
 6. **Run the development server**
+
    ```bash
    npm run dev
    ```
@@ -157,9 +162,11 @@ All backend/serverless logic is implemented in Rust in `src/satellite/`.
 ### How to Build the Serverless Functions
 
 1. **Local Build (for development):**
+
    ```bash
    juno dev build
    ```
+
    This will compile your Rust satellite and make it available to the local emulator.
 
 2. **Production Build & Deploy:**
@@ -180,6 +187,7 @@ The app is configured to work with Juno's local emulator for development.
 ### Production Deployment
 
 1. **Deploy to Juno**:
+
    ```bash
    juno deploy
    ```

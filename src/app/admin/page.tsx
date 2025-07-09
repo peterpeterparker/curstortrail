@@ -2,18 +2,29 @@
 
 import { Navigation } from "@/components/navigation";
 import { ProtectedRoute } from "@/components/protected-route";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { Mountain, Upload, X, Plus } from "lucide-react";
-import { useState } from "react";
-import { createTrail, uploadFile } from "@/lib/juno";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { parseGPX } from "@/lib/gpx-parser";
+import { createTrail, uploadFile } from "@/lib/juno";
 import type { TrailFormData } from "@/types/trail";
+import { Upload, X } from "lucide-react";
+import { useState } from "react";
 
 function AdminContent() {
   const [formData, setFormData] = useState<TrailFormData>({
@@ -24,7 +35,7 @@ function AdminContent() {
     duration: "",
     difficulty: "moderate",
     location: "",
-    date: new Date().toISOString().split('T')[0],
+    date: new Date().toISOString().split("T")[0],
     gpxFile: undefined,
     photos: [],
   });
@@ -39,17 +50,20 @@ function AdminContent() {
   const [gpxData, setGpxData] = useState<any>(null);
 
   const handleInputChange = (field: keyof TrailFormData, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleNumberInputChange = (field: 'distance' | 'elevation', value: string) => {
+  const handleNumberInputChange = (
+    field: "distance" | "elevation",
+    value: string,
+  ) => {
     // Update the display value
-    setInputValues(prev => ({ ...prev, [field]: value }));
-    
+    setInputValues((prev) => ({ ...prev, [field]: value }));
+
     // Update the form data with parsed number or 0 if empty
-    const numValue = value === '' ? 0 : Number(value);
+    const numValue = value === "" ? 0 : Number(value);
     if (!isNaN(numValue)) {
-      setFormData(prev => ({ ...prev, [field]: numValue }));
+      setFormData((prev) => ({ ...prev, [field]: numValue }));
     }
   };
 
@@ -58,14 +72,14 @@ function AdminContent() {
       const text = await file.text();
       const parsed = await parseGPX(text);
       setGpxData(parsed);
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         distance: parsed.distance,
         elevation: parsed.elevation,
         duration: formatDuration(parsed.duration),
       }));
       // Update input display values
-      setInputValues(prev => ({
+      setInputValues((prev) => ({
         ...prev,
         distance: parsed.distance.toString(),
         elevation: parsed.elevation.toString(),
@@ -85,14 +99,14 @@ function AdminContent() {
 
   const handlePhotoUpload = (files: FileList) => {
     const newPhotos = Array.from(files);
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       photos: [...prev.photos, ...newPhotos],
     }));
   };
 
   const removePhoto = (index: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       photos: prev.photos.filter((_, i) => i !== index),
     }));
@@ -106,14 +120,20 @@ function AdminContent() {
       // Upload photos first
       const photoUrls: string[] = [];
       for (const photo of formData.photos) {
-        const uploadResult = await uploadFile(photo, `trails/photos/${Date.now()}_${photo.name}`);
+        const uploadResult = await uploadFile(
+          photo,
+          `trails/photos/${Date.now()}_${photo.name}`,
+        );
         photoUrls.push(uploadResult.fullPath);
       }
 
       // Upload GPX file if provided
       let gpxFileUrl: string | undefined;
       if (formData.gpxFile) {
-        const gpxUploadResult = await uploadFile(formData.gpxFile, `trails/gpx/${Date.now()}_${formData.gpxFile.name}`);
+        const gpxUploadResult = await uploadFile(
+          formData.gpxFile,
+          `trails/gpx/${Date.now()}_${formData.gpxFile.name}`,
+        );
         gpxFileUrl = gpxUploadResult.fullPath;
       }
 
@@ -132,7 +152,7 @@ function AdminContent() {
       };
 
       await createTrail(trailData);
-      
+
       // Reset form
       setFormData({
         title: "",
@@ -142,12 +162,12 @@ function AdminContent() {
         duration: "",
         difficulty: "moderate",
         location: "",
-        date: new Date().toISOString().split('T')[0],
+        date: new Date().toISOString().split("T")[0],
         gpxFile: undefined,
         photos: [],
       });
       setGpxData(null);
-      
+
       alert("Trail added successfully!");
     } catch (error) {
       console.error("Error creating trail:", error);
@@ -158,12 +178,12 @@ function AdminContent() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <Navigation />
-      
+
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Add New Trail</h1>
+          <h1 className="mb-2 text-3xl font-bold">Add New Trail</h1>
           <p className="text-muted-foreground">
             Share your latest trail running adventure
           </p>
@@ -179,24 +199,28 @@ function AdminContent() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div>
                     <Label htmlFor="title">Trail Name *</Label>
                     <Input
                       id="title"
                       value={formData.title}
-                      onChange={(e) => handleInputChange("title", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("title", e.target.value)
+                      }
                       placeholder="e.g., Mount Tamalpais Loop"
                       required
                     />
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="location">Location *</Label>
                     <Input
                       id="location"
                       value={formData.location}
-                      onChange={(e) => handleInputChange("location", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("location", e.target.value)
+                      }
                       placeholder="e.g., Marin County, CA"
                       required
                     />
@@ -208,13 +232,15 @@ function AdminContent() {
                   <Textarea
                     id="description"
                     value={formData.description}
-                    onChange={(e) => handleInputChange("description", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("description", e.target.value)
+                    }
                     placeholder="Describe your trail experience..."
                     rows={4}
                   />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                   <div>
                     <Label htmlFor="distance">Distance (km) *</Label>
                     <Input
@@ -222,40 +248,48 @@ function AdminContent() {
                       type="number"
                       step="0.1"
                       value={inputValues.distance}
-                      onChange={(e) => handleNumberInputChange("distance", e.target.value)}
+                      onChange={(e) =>
+                        handleNumberInputChange("distance", e.target.value)
+                      }
                       required
                     />
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="elevation">Elevation (m) *</Label>
                     <Input
                       id="elevation"
                       type="number"
                       value={inputValues.elevation}
-                      onChange={(e) => handleNumberInputChange("elevation", e.target.value)}
+                      onChange={(e) =>
+                        handleNumberInputChange("elevation", e.target.value)
+                      }
                       required
                     />
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="duration">Duration *</Label>
                     <Input
                       id="duration"
                       value={formData.duration}
-                      onChange={(e) => handleInputChange("duration", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("duration", e.target.value)
+                      }
                       placeholder="e.g., 2h 30m"
                       required
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div>
                     <Label htmlFor="difficulty">Difficulty *</Label>
                     <Select
                       value={formData.difficulty}
-                      onValueChange={(value) => handleInputChange("difficulty", value)}
+                      onValueChange={(value) =>
+                        handleInputChange("difficulty", value)
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -268,14 +302,16 @@ function AdminContent() {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="date">Date *</Label>
                     <Input
                       id="date"
                       type="date"
                       value={formData.date}
-                      onChange={(e) => handleInputChange("date", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("date", e.target.value)
+                      }
                       required
                     />
                   </div>
@@ -296,9 +332,10 @@ function AdminContent() {
                     }}
                   />
                   {gpxData && (
-                    <div className="mt-2 p-3 bg-muted rounded-md">
+                    <div className="bg-muted mt-2 rounded-md p-3">
                       <p className="text-sm">
-                        GPX loaded: {gpxData.name} ({gpxData.points.length} points)
+                        GPX loaded: {gpxData.name} ({gpxData.points.length}{" "}
+                        points)
                       </p>
                     </div>
                   )}
@@ -312,9 +349,11 @@ function AdminContent() {
                         type="button"
                         variant="outline"
                         size="sm"
-                        onClick={() => document.getElementById('photos')?.click()}
+                        onClick={() =>
+                          document.getElementById("photos")?.click()
+                        }
                       >
-                        <Upload className="h-4 w-4 mr-2" />
+                        <Upload className="mr-2 h-4 w-4" />
                         Add Photos
                       </Button>
                       <input
@@ -323,15 +362,17 @@ function AdminContent() {
                         multiple
                         accept="image/*"
                         className="hidden"
-                        onChange={(e) => e.target.files && handlePhotoUpload(e.target.files)}
+                        onChange={(e) =>
+                          e.target.files && handlePhotoUpload(e.target.files)
+                        }
                       />
                     </div>
-                    
+
                     {formData.photos.length > 0 && (
-                      <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2">
+                      <div className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-4">
                         {formData.photos.map((photo, index) => (
                           <div key={index} className="relative">
-                            <div className="w-full h-24 bg-muted rounded-md flex items-center justify-center text-xs">
+                            <div className="bg-muted flex h-24 w-full items-center justify-center rounded-md text-xs">
                               📷 {photo.name}
                             </div>
                             <Button
@@ -368,4 +409,4 @@ export default function AdminPage() {
       <AdminContent />
     </ProtectedRoute>
   );
-} 
+}

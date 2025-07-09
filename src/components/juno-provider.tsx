@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
 import { initJunoClient } from "@/lib/juno";
+import { useEffect } from "react";
 
 export function JunoProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -9,4 +9,4 @@ export function JunoProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return <>{children}</>;
-} 
+}

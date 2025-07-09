@@ -1,10 +1,10 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/auth-context";
+import { Home, LogIn, LogOut, Mountain, Settings, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Mountain, Home, Settings, LogIn, LogOut, User } from "lucide-react";
-import { useAuth } from "@/contexts/auth-context";
 
 export function Navigation() {
   const pathname = usePathname();
@@ -17,7 +17,7 @@ export function Navigation() {
   ];
 
   return (
-    <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav className="bg-background/95 supports-[backdrop-filter]:bg-background/60 border-b backdrop-blur">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
@@ -29,7 +29,7 @@ export function Navigation() {
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
-              
+
               return (
                 <Link key={item.href} href={item.href}>
                   <Button
@@ -43,10 +43,10 @@ export function Navigation() {
                 </Link>
               );
             })}
-            
+
             {user ? (
               <div className="flex items-center space-x-2">
-                <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+                <div className="text-muted-foreground flex items-center space-x-1 text-sm">
                   <User className="h-4 w-4" />
                   <span>{user.userId}</span>
                 </div>
@@ -76,4 +76,4 @@ export function Navigation() {
       </div>
     </nav>
   );
-} 
+}

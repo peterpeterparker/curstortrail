@@ -5,7 +5,7 @@ export interface Trail {
   distance: number; // in kilometers
   elevation: number; // in meters
   duration: string; // e.g., "2h 30m"
-  difficulty: 'easy' | 'moderate' | 'hard' | 'expert';
+  difficulty: "easy" | "moderate" | "hard" | "expert";
   location: string;
   date: string; // ISO date string
   gpxFile?: string; // GPX file path in storage
@@ -20,7 +20,7 @@ export interface TrailFormData {
   distance: number;
   elevation: number;
   duration: string;
-  difficulty: 'easy' | 'moderate' | 'hard' | 'expert';
+  difficulty: "easy" | "moderate" | "hard" | "expert";
   location: string;
   date: string;
   gpxFile?: File;
@@ -40,4 +40,4 @@ export interface GPXTrack {
   distance: number;
   elevation: number;
   duration: number;
-} 
+}
