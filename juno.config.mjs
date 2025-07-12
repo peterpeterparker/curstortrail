@@ -5,6 +5,7 @@ export default defineConfig({
   satellite: {
     ids: {
       development: "uxrrr-q7777-77774-qaaaq-cai",
+      production: "ir5om-ryaaa-aaaal-asheq-cai",
       staging: "ir5om-ryaaa-aaaal-asheq-cai",
     },
     source: "out",
